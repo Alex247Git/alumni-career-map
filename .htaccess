@@ -1,0 +1,11 @@
+DirectoryIndex frontend/index.html
+
+RewriteEngine On
+
+# Route /api/* to the Slim API public directory (add back /api prefix for Slim)
+RewriteRule ^api/(.*)$ api/public/index.php/api/$1 [QSA,L,NE]
+
+# If the request is not for an existing file or directory, serve the frontend
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ frontend/$1 [QSA,L]
