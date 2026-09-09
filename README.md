@@ -1,11 +1,11 @@
 # 🗺️ Alumni Career Map
 
-**Where did everybody end up?** A platform that pins every graduate's current job on a world map — then turns it into searchable, live data.
+**Where did everybody end up?** A platform that pins every graduate's current job on a world map — then turns it into searchable, live data. A small side project built to explore maps + APIs + JWT in one go.
 
 > Built as an individual project during my MSc studies.
 > All seed data is synthetic 👤 fake names, `@example.com` emails, fictional companies — safe to browse and demo.
 
-![Static Badge](https://img.shields.io/badge/Stack-PHP%20(Slim%204)-blue) ![Static Badge](https://img.shields.io/badge/Frontend-vanilla%20JS%20%2B%20Bootstrap%205-orange) ![Static Badge](https://img.shields.io/badge/DB-MySQL-brightgreen) ![Static Badge](https://img.shields.io/badge/Auth-JWT%20%2F%20ownership-orange) ![Static Badge](https://img.shields.io/badge/Docker-yes-green)
+![Static Badge](https://img.shields.io/badge/Stack-PHP%20(Slim%204)-blue) ![Static Badge](https://img.shields.io/badge/Frontend-vanilla%20JS%20%2B%20Bootstrap%205-orange) ![Static Badge](https://img.shields.io/badge/DB-MySQL-brightgreen) ![Static Badge](https://img.shields.io/badge/Auth-JWT%20%2F%20ownership-orange) ![Static Badge](https://img.shields.io/badge/Docker-yes-green) ![Static Badge](https://img.shields.io/badge/Scope-small%20project-lightgrey)
 
 ---
 
