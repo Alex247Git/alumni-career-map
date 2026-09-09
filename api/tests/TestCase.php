@@ -21,10 +21,12 @@ class TestCase extends PHPUnit_TestCase
     use ProphecyTrait;
 
     /**
+     * @param bool $withAppRoutes load the application routes (set false in tests
+     *                            that register their own routes)
      * @return App
      * @throws Exception
      */
-    protected function getAppInstance(): App
+    protected function getAppInstance(bool $withAppRoutes = true): App
     {
         // Instantiate PHP-DI ContainerBuilder
         $containerBuilder = new ContainerBuilder();
@@ -55,8 +57,10 @@ class TestCase extends PHPUnit_TestCase
         $middleware($app);
 
         // Register routes
-        $routes = require __DIR__ . '/../app/routes.php';
-        $routes($app);
+        if ($withAppRoutes) {
+            $routes = require __DIR__ . '/../app/routes.php';
+            $routes($app);
+        }
 
         return $app;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Application\Actions\User;
 
+use App\Application\Actions\User\ViewUserAction;
 use App\Application\Actions\ActionError;
 use App\Application\Actions\ActionPayload;
 use App\Application\Handlers\HttpErrorHandler;
@@ -18,7 +19,7 @@ class ViewUserActionTest extends TestCase
 {
     public function testAction()
     {
-        $app = $this->getAppInstance();
+        $app = $this->getAppInstance(false);
 
         /** @var Container $container */
         $container = $app->getContainer();
@@ -33,6 +34,8 @@ class ViewUserActionTest extends TestCase
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
 
+        $app->get('/users/{id}', ViewUserAction::class);
+
         $request = $this->createRequest('GET', '/users/1');
         $response = $app->handle($request);
 
@@ -45,7 +48,7 @@ class ViewUserActionTest extends TestCase
 
     public function testActionThrowsUserNotFoundException()
     {
-        $app = $this->getAppInstance();
+        $app = $this->getAppInstance(false);
 
         $callableResolver = $app->getCallableResolver();
         $responseFactory = $app->getResponseFactory();
@@ -66,6 +69,8 @@ class ViewUserActionTest extends TestCase
             ->shouldBeCalledOnce();
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
+
+        $app->get('/users/{id}', ViewUserAction::class);
 
         $request = $this->createRequest('GET', '/users/1');
         $response = $app->handle($request);

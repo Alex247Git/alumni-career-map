@@ -51,7 +51,7 @@ class JobController
         // Check if job exists and belongs to this alumnus
         $stmt = $db->prepare('SELECT id FROM jobs WHERE id = :job_id AND alumnus_id = :alumnus_id LIMIT 1');
         $stmt->execute([':job_id' => $jobId, ':alumnus_id' => $alumnusId]);
-        
+
         if (!$stmt->fetch()) {
             return $this->jsonResponse($response, [
                 'status' => 'error',
@@ -101,7 +101,7 @@ class JobController
         // Check if job exists and belongs to this alumnus
         $stmt = $db->prepare('SELECT id FROM jobs WHERE id = :job_id AND alumnus_id = :alumnus_id LIMIT 1');
         $stmt->execute([':job_id' => $jobId, ':alumnus_id' => $alumnusId]);
-        
+
         if (!$stmt->fetch()) {
             return $this->jsonResponse($response, [
                 'status' => 'error',
@@ -112,7 +112,10 @@ class JobController
         $data = $request->getParsedBody();
 
         // Build update fields dynamically
-        $allowedFields = ['company_name', 'job_title', 'country', 'city', 'latitude', 'longitude', 'is_current', 'start_date'];
+        $allowedFields = [
+            'company_name', 'job_title', 'country', 'city',
+            'latitude', 'longitude', 'is_current', 'start_date',
+        ];
         $updates = [];
         $bindings = [':job_id' => $jobId];
 

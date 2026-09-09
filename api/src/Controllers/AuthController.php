@@ -41,7 +41,9 @@ class AuthController
         $db = Database::getConnection($dbSettings);
 
         // Check if alumnus exists
-        $stmt = $db->prepare('SELECT id, first_name, last_name, email, password FROM alumni WHERE email = :email LIMIT 1');
+        $stmt = $db->prepare(
+            'SELECT id, first_name, last_name, email, password FROM alumni WHERE email = :email LIMIT 1'
+        );
         $stmt->execute([':email' => $email]);
         $alumnus = $stmt->fetch();
 
