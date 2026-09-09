@@ -101,6 +101,7 @@ To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down
 | GET | `/api/v1/alumni/count` | JWT |
 | GET | `/api/v1/alumni` | JWT |
 | GET | `/api/v1/alumni/search?…&format=json\|xml` | JWT |
+| POST | `/api/v1/alumni/{id}/jobs` | JWT **+ owner** |
 | GET | `/api/v1/alumni/{id}/jobs` | JWT |
 | PUT | `/api/v1/alumni/{id}/jobs/{jobId}` | JWT **+ owner** |
 | DELETE | `/api/v1/alumni/{id}/jobs/{jobId}` | JWT **+ owner** |
@@ -109,7 +110,7 @@ To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down
 
 - ⏭️ React + MUI frontend (`leaflet-react`, Recharts, dark theme)
 - ⏭️ OpenAPI / Swagger docs
-- ✅ GitHub Actions CI (phpcs + phpstan + phpunit on PHP 8.2/8.3)
+- ✅ GitHub Actions CI (phpcs + phpstan + phpunit on PHP 8.2/8.3, live integration suite auto-skips without the Docker stack)
 
 ## 📄 License
 
