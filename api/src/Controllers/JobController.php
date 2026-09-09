@@ -20,6 +20,103 @@ class JobController
     }
 
     /**
+     * POST /api/v1/alumni/{id}/jobs
+     * Endpoint: Add a new job for an alumnus
+     */
+    public function create(Request $request, Response $response, array $args): Response
+    {
+        $alumnusId = (int) ($args['id'] ?? 0);
+
+        if ($alumnusId <= 0) {
+            return $this->jsonResponse($response, [
+                'status' => 'error',
+                'message' => 'Invalid alumnus ID',
+            ], 400);
+        }
+
+        // Authorization: only the alumnus themselves can add their jobs
+        $jwtPayload = $request->getAttribute('jwt_payload');
+        $authenticatedUserId = (int) ($jwtPayload['sub'] ?? 0);
+        if ($authenticatedUserId !== $alumnusId) {
+            return $this->jsonResponse($response, [
+                'status' => 'error',
+                'message' => 'Forbidden: You can only add jobs to your own profile',
+            ], 403);
+        }
+
+        $data = $request->getParsedBody();
+
+        // Validate required fields
+        $required = ['company_name', 'job_title', 'country', 'city', 'latitude', 'longitude', 'start_date'];
+        $missing = [];
+        foreach ($required as $field) {
+            if (!isset($data[$field]) || $data[$field] === '') {
+                $missing[] = $field;
+            }
+        }
+
+        if (!empty($missing)) {
+            return $this->jsonResponse($response, [
+                'status' => 'error',
+                'message' => 'Missing required fields: ' . implode(', ', $missing),
+            ], 400);
+        }
+
+        // Validate coordinates are numeric
+        if (!is_numeric($data['latitude']) || !is_numeric($data['longitude'])) {
+            return $this->jsonResponse($response, [
+                'status' => 'error',
+                'message' => 'Latitude and longitude must be numeric',
+            ], 400);
+        }
+
+        $settings = $this->container->get(SettingsInterface::class);
+        $db = Database::getConnection($settings->get('db'));
+
+        // Check if alumnus exists
+        $stmt = $db->prepare('SELECT id FROM alumni WHERE id = :alumnus_id LIMIT 1');
+        $stmt->execute([':alumnus_id' => $alumnusId]);
+        if (!$stmt->fetch()) {
+            return $this->jsonResponse($response, [
+                'status' => 'error',
+                'message' => 'Alumnus not found',
+            ], 404);
+        }
+
+        // Insert the job
+        $stmt = $db->prepare(
+            'INSERT INTO jobs (alumnus_id, company_name, job_title, country, city,
+             latitude, longitude, is_current, start_date)
+             VALUES (:alumnus_id, :company_name, :job_title, :country, :city,
+             :latitude, :longitude, :is_current, :start_date)'
+        );
+        $stmt->execute([
+            ':alumnus_id' => $alumnusId,
+            ':company_name' => (string) $data['company_name'],
+            ':job_title' => (string) $data['job_title'],
+            ':country' => (string) $data['country'],
+            ':city' => (string) $data['city'],
+            ':latitude' => (float) $data['latitude'],
+            ':longitude' => (float) $data['longitude'],
+            ':is_current' => !empty($data['is_current']) ? 1 : 0,
+            ':start_date' => (string) $data['start_date'],
+        ]);
+
+        $newJobId = (int) $db->lastInsertId();
+
+        // Fetch created job
+        $stmt = $db->prepare('SELECT * FROM jobs WHERE id = :job_id');
+        $stmt->execute([':job_id' => $newJobId]);
+        $createdJob = $stmt->fetch();
+
+        return $this->jsonResponse($response, [
+            'status' => 'success',
+            'message' => 'Job created successfully',
+            'data' => $createdJob,
+        ], 201);
+    }
+
+    /**
      * DELETE /api/v1/alumni/{id}/jobs/{jobId}
      * Endpoint #6: Delete a job from an alumnus
      */

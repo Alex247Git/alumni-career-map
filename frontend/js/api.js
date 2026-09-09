@@ -118,6 +118,14 @@ async function apiGetAlumnusJobs(alumnusId, token) {
 // ============== JOBS ENDPOINTS ==============
 
 /**
+ * POST /api/v1/alumni/{id}/jobs
+ * Add a new job for an alumnus
+ */
+async function apiCreateJob(alumnusId, data, token) {
+    return apiRequest('POST', `/api/v1/alumni/${alumnusId}/jobs`, data, token);
+}
+
+/**
  * PUT /api/v1/alumni/{id}/jobs/{jobId}
  * Endpoint #7: Update a job
  */
