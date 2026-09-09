@@ -1,0 +1,22 @@
+# secrets / env (never commit)
+.env
+api/.env
+*.env
+
+# php
+vendor/
+api/vendor/
+composer.lock
+api/composer.lock
+
+# logs
+*.log
+api/logs/*
+
+# os
+.DS_Store
+Thumbs.db
+
+# ide
+.vscode/
+.idea/

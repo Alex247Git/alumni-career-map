@@ -3,7 +3,7 @@
  * All AJAX calls to the Alumni REST API
  */
 
-const API_BASE = 'http://alumni.ds.uth.gr';
+const API_BASE = 'http://localhost:8081';  // dev; swap for your production API origin
 
 /**
  * Generic API request
