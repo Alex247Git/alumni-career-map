@@ -44,12 +44,17 @@ class AlumniController
         $settings = $this->container->get(SettingsInterface::class);
         $db = Database::getConnection($settings->get('db'));
 
-        $stmt = $db->query('SELECT id, first_name, last_name, email, enrollment_year, graduation_year, created_at FROM alumni ORDER BY last_name ASC');
+        $stmt = $db->query(
+            'SELECT id, first_name, last_name, email, enrollment_year, graduation_year, created_at
+             FROM alumni ORDER BY last_name ASC'
+        );
         $alumni = $stmt->fetchAll();
 
         // Attach jobs to each alumnus
-        $jobStmt = $db->prepare('SELECT company_name, job_title, country, city, latitude, longitude, is_current, start_date 
-                                  FROM jobs WHERE alumnus_id = :alumnus_id ORDER BY start_date DESC');
+        $jobStmt = $db->prepare(
+            'SELECT company_name, job_title, country, city, latitude, longitude, is_current, start_date
+             FROM jobs WHERE alumnus_id = :alumnus_id ORDER BY start_date DESC'
+        );
 
         foreach ($alumni as &$alumnus) {
             $jobStmt->execute([':alumnus_id' => $alumnus['id']]);
@@ -128,13 +133,14 @@ class AlumniController
         $offset = ($page - 1) * $perPage;
 
         // Fetch alumni with their current job for country search
-        $dataSql = "SELECT DISTINCT a.id, a.first_name, a.last_name, a.email, a.enrollment_year, a.graduation_year, a.created_at
+        $dataSql = "SELECT DISTINCT a.id, a.first_name, a.last_name, a.email,
+                    a.enrollment_year, a.graduation_year, a.created_at
                     FROM alumni a
                     LEFT JOIN jobs j ON a.id = j.alumnus_id
                     $whereClause
                     ORDER BY a.last_name ASC
                     LIMIT :limit OFFSET :offset";
-        
+
         $dataStmt = $db->prepare($dataSql);
         foreach ($bindings as $key => $val) {
             $dataStmt->bindValue($key, $val);
@@ -145,9 +151,11 @@ class AlumniController
         $alumni = $dataStmt->fetchAll();
 
         // For each alumnus, get their current job (for country info)
-        $jobStmt = $db->prepare('SELECT company_name, job_title, country, city, latitude, longitude, is_current, start_date 
-                                  FROM jobs WHERE alumnus_id = :alumnus_id ORDER BY start_date DESC');
-        
+        $jobStmt = $db->prepare(
+            'SELECT company_name, job_title, country, city, latitude, longitude, is_current, start_date
+             FROM jobs WHERE alumnus_id = :alumnus_id ORDER BY start_date DESC'
+        );
+
         $resultData = [];
         foreach ($alumni as $alumnus) {
             $jobStmt->execute([':alumnus_id' => $alumnus['id']]);
@@ -240,7 +248,7 @@ class AlumniController
         foreach ($data as $key => $value) {
             // XML tags cannot start with a number
             $tagName = is_numeric($key) ? 'item' : (string) $key;
-            
+
             if (is_array($value)) {
                 // Check if it's a sequential array
                 if (array_keys($value) === range(0, count($value) - 1)) {
