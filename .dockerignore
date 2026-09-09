@@ -1,0 +1,8 @@
+# Keep the docker build context small and safe.
+.git
+node_modules
+.venv
+api/vendor
+api/.env
+api/var/cache
+*.log

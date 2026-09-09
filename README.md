@@ -27,24 +27,47 @@ Ever wondered "what do graduates do with their degree"? **Alumni Career Map** an
 | Data | MySQL · utf8mb4 · seed with geo-coordinates |
 | Frontend | Vanilla JS · **Bootstrap 5** · Leaflet · Charts |
 | Auth | JWT (firebase/php-jwt) · bearer tokens · ownership checks |
-| Ops | Docker compose · `api/sql/` schema+seed |
+| Ops | **Docker Compose** (root, one command) · auto-seeded MySQL · nginx reverse proxy |
 
 ---
 
 ## 📁 Repository layout
 
 ```
-api/                       Slim 4 REST API (PHP)
-  app/settings.php         runtime config — reads DB/JWT from env
-  sql/schema.sql           database schema
-  sql/seed.sql             20 synthetic graduates + jobs
-  sql/update_schema.sql    adds password column + API user
-  .env.example             env template (copy to .env, fill it in)
-frontend/                  single-page app (vanilla JS + Bootstrap 5)
-.htaccess                  routes /api/* → Slim, everything else → frontend
+docker-compose.yml           one-command full stack (db + api + frontend)
+api/                         Slim 4 REST API (PHP)
+  Dockerfile                 PHP 8.3 + composer image
+  app/settings.php           runtime config — reads DB/JWT from env
+  sql/schema.sql             database schema
+  sql/seed.sql               20 synthetic graduates + jobs
+  sql/docker/                schema + seed auto-loaded by the MySQL container
+  .env.example               env template (manual setup only)
+frontend/                    single-page app (vanilla JS + Bootstrap 5)
+  nginx.conf                 serves the app + reverse-proxies /api → API
+.htaccess                    routes /api/* → Slim, everything else → frontend
 ```
 
-## 🚀 Quick start
+## 🐳 Docker (recommended)
+
+Run the **whole stack** (MySQL + API + frontend) with a single command:
+
+```bash
+docker compose up -d --build
+```
+
+- 🗺️ UI → **http://localhost:8081**
+- ⚙️ API → **http://localhost:8081/api/v1** (nginx reverse-proxies `/api` → the API container, so the browser talks to one origin)
+- Raw API on **http://localhost:8080** (optional)
+
+The MySQL container creates the schema and seeds 20 synthetic alumni on first start, so you can log in right away:
+
+> **Log in with any seeded alumnus** — email from `api/sql/seed.sql`, password **`alumni2026`**.
+
+To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down -v && docker compose up -d --build`.
+
+---
+
+## 🚀 Manual quick start (no Docker)
 
 1. **Database**
    ```bash
@@ -60,7 +83,9 @@ frontend/                  single-page app (vanilla JS + Bootstrap 5)
    export $(cat .env | xargs)      # loads DB_PASS / JWT_SECRET …
    php -S 0.0.0.0:8081 -t public
    ```
-   …or `docker-compose up` from `api/` for the containerized path.
+   …or skip all of this and use the **one-command Docker stack** above.
+
+> ℹ️ The first `docker compose up --build` compiles PHP extensions and takes a few minutes — subsequent builds are cached and fast.
 
 3. **Frontend** — serve `frontend/` from any static server and point `api.js` `API_BASE` at your API.
 

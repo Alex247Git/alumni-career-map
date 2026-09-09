@@ -1,0 +1,75 @@
+# ============================================================
+# Alumni Career Map — full stack (single command)
+#   docker compose up -d --build
+#
+# - db        MySQL 8 (auto-creates schema + seed on first run)
+# - api       Slim 4 REST API (PHP 8.3, built local)
+# - frontend  nginx serving the SPAs AND reverse-proxying /api/
+#             to the api container (same-origin, no CORS config)
+#
+# Web UI : http://localhost:8081
+# API    : http://localhost:8081/api/v1
+# ============================================================
+
+services:
+  db:
+    image: mysql:8.4
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root-dev-insecure
+      MYSQL_DATABASE: alumni_ds_db
+      MYSQL_USER: alumni_api
+      MYSQL_PASSWORD: ApiPass_2026!
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      # schema + seed run ONLY on an empty data volume (first `up`)
+      - ./api/sql/docker:/docker-entrypoint-initdb.d:ro
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot-dev-insecure"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    image: alumni-career-map-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      docker: "true"            # Slim logs go to stdout (see settings.php)
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: alumni_ds_db
+      DB_USER: alumni_api
+      DB_PASS: ApiPass_2026!
+      JWT_SECRET: dev-only-insecure-secret-change-me
+      JWT_ISSUER: alumni-career-map
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "8080:8080"             # raw API on host:8080 (optional)
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:1.27-alpine
+    ports:
+      - "8081:80"               # http://localhost:8081 -> app UI (served + /api proxied)
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  db_data:
