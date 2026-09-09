@@ -23,17 +23,18 @@ return function (ContainerBuilder $containerBuilder) {
                 ],
                 // Database settings
                 'db' => [
-                    'host' => '127.0.0.1',
-                    'port' => 3306,
-                    'dbname' => 'alumni_ds_db',
-                    'user' => 'alumni_api',
-                    'pass' => 'ApiPass_2026!',
+                    'host' => getenv('DB_HOST') ?: '127.0.0.1',
+                    'port' => getenv('DB_PORT') ?: 3306,
+                    'dbname' => getenv('DB_NAME') ?: 'alumni_ds_db',
+                    'user' => getenv('DB_USER') ?: 'alumni_api',
+                    'pass' => getenv('DB_PASS') ?: 'change-me',
                     'charset' => 'utf8mb4',
                 ],
                 // JWT settings
                 'jwt' => [
-                    'secret' => 'AlumniDS_SecretKey_2026_AdvancedWebApps',
-                    'issuer' => 'alumni.ds.uth.gr',
+                    // !! Provide strong values via env (see .env.example) in production !!
+                    'secret' => getenv('JWT_SECRET') ?: 'dev-only-insecure-secret-change-me',
+                    'issuer' => getenv('JWT_ISSUER') ?: 'alumni-career-map',
                     'expire' => 3600, // 1 hour
                 ],
             ]);
