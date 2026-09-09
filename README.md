@@ -1,69 +1,88 @@
-# Alumni Career Map
+# 🗺️ Alumni Career Map
 
-A platform to visualise where graduates end up. Map of alumni worldwide (Leaflet/OpenStreetMap), job analytics by country, searchable directory, and a full REST API.
+**Where did everybody end up?** A platform that pins every graduate's current job on a world map — then turns it into searchable, live data.
 
 > Built as an individual project during my MSc studies.
-> Seed data is 100% synthetic (fake names, `@example.com` emails, fictional companies).
+> All seed data is synthetic 👤 fake names, `@example.com` emails, fictional companies — safe to browse and demo.
 
-## Features
+![Static Badge](https://img.shields.io/badge/Stack-PHP%20(Slim%204)-blue) ![Static Badge](https://img.shields.io/badge/Frontend-vanilla%20JS%20%2B%20Bootstrap%205-orange) ![Static Badge](https://img.shields.io/badge/DB-MySQL-brightgreen) ![Static Badge](https://img.shields.io/badge/Auth-JWT%20%2F%20ownership-orange) ![Static Badge](https://img.shields.io/badge/Docker-yes-green)
 
-- **Interactive map** — every alumnus' current job pinned with real-world coordinates (Leaflet + OSM)
-- **Analytics** — bar chart of graduate distribution by country, alumni count
-- **Search** — multi-criteria (name, enrollment year, graduation year, country) with pagination; JSON **and** XML
-- **Auth** — JWT login/registration, ownership authorization (only the owner edits/deletes their jobs)
-- **REST API** — Slim Framework 4 (PHP), layered architecture (Controllers / Domain / Infrastructure / Middleware)
-- **Stack**: PHP (Slim 4), MySQL, vanilla JS + Bootstrap 5 frontend, Docker
+---
 
-## Repository layout
+## ✨ What it does
+
+Ever wondered "what do graduates do with their degree"? **Alumni Career Map** answers that in two clicks:
+
+- 🗺️ **Interactive map** — every alumnus' current job pinned with real-world coordinates (Leaflet + OpenStreetMap). Zoom Athens → New York → Tokyo and watch the network light up.
+- 📊 **Analytics** — a bar chart of graduate distribution by country, plus a live total count. The data tells the story.
+- 🔍 **Search** — multi-criteria (name, enrollment, graduation year, country) with pagination, served as **JSON or XML**.
+- 🔐 **Auth done right** — JWT login/registration, and *ownership authorization*: you can only edit your own jobs.
+- 🧱 **REST API** — Slim Framework 4 (PHP) with a proper layered architecture (Controllers / Domain / Infrastructure / Middleware).
+
+## 🧩 Stack
+
+| Layer | Tech |
+|---|---|
+| Backend | PHP · **Slim 4** (routing, PSR-7, PHP-DI, Monolog) |
+| Data | MySQL · utf8mb4 · seed with geo-coordinates |
+| Frontend | Vanilla JS · **Bootstrap 5** · Leaflet · Charts |
+| Auth | JWT (firebase/php-jwt) · bearer tokens · ownership checks |
+| Ops | Docker compose · `api/sql/` schema+seed |
+
+---
+
+## 📁 Repository layout
 
 ```
-api/                 Slim 4 REST API (PHP)
-  app/settings.php   config (reads DB/JWT from env vars)
-  sql/schema.sql     database schema
-  sql/seed.sql       20 synthetic graduates + jobs
-  sql/update_schema.sql  adds password column + API user
-  .env.example       env template (copy to .env)
-frontend/            vanilla JS + Bootstrap 5 single-page app
-.htaccess            routes /api/* to Slim, else serves frontend
+api/                       Slim 4 REST API (PHP)
+  app/settings.php         runtime config — reads DB/JWT from env
+  sql/schema.sql           database schema
+  sql/seed.sql             20 synthetic graduates + jobs
+  sql/update_schema.sql    adds password column + API user
+  .env.example             env template (copy to .env, fill it in)
+frontend/                  single-page app (vanilla JS + Bootstrap 5)
+.htaccess                  routes /api/* → Slim, everything else → frontend
 ```
 
-## Quick start
+## 🚀 Quick start
 
 1. **Database**
-   ```
+   ```bash
    mysql -u root -p < api/sql/schema.sql
    mysql -u root -p < api/sql/seed.sql
    mysql -u root -p < api/sql/update_schema.sql
    ```
-   Then override the passwords: edit `api/.env` (copy from `api/.env.example`) and update the `GRANT`/`CREATE USER` in `update_schema.sql` to match.
+   Then set your own passwords: copy `api/.env.example` → `api/.env` and update the `GRANT`/`CREATE USER` in `update_schema.sql` to match.
+
 2. **API** (from `api/`)
-   ```
+   ```bash
    composer install
-   export $(cat .env | xargs)   # load DB_PASS / JWT_SECRET etc.
+   export $(cat .env | xargs)      # loads DB_PASS / JWT_SECRET …
    php -S 0.0.0.0:8081 -t public
    ```
-   (or `docker-compose up` from `api/`)
-3. **Frontend** — point a static server at `frontend/` and set `API_BASE` in `frontend/js/api.js` to your API origin.
+   …or `docker-compose up` from `api/` for the containerized path.
 
-## API endpoints
+3. **Frontend** — serve `frontend/` from any static server and point `api.js` `API_BASE` at your API.
 
-| Method | Path | Auth |
+## 🔌 API at a glance
+
+| Method | Endpoint | Auth |
 |---|---|---|
-| POST | `/api/v1/auth/login` | – (returns JWT) |
-| POST | `/api/v1/alumni` | – (register) |
+| POST | `/api/v1/auth/login` | — (returns JWT) |
+| POST | `/api/v1/alumni` | — (register) |
 | GET | `/api/v1/alumni/count` | JWT |
 | GET | `/api/v1/alumni` | JWT |
-| GET | `/api/v1/alumni/search?name=&enrollment_year=&graduation_year=&country=&page=&format=json\|xml` | JWT |
+| GET | `/api/v1/alumni/search?…&format=json\|xml` | JWT |
 | GET | `/api/v1/alumni/{id}/jobs` | JWT |
-| PUT | `/api/v1/alumni/{id}/jobs/{jobId}` | JWT + ownership |
-| DELETE | `/api/v1/alumni/{id}/jobs/{jobId}` | JWT + ownership |
+| PUT | `/api/v1/alumni/{id}/jobs/{jobId}` | JWT **+ owner** |
+| DELETE | `/api/v1/alumni/{id}/jobs/{jobId}` | JWT **+ owner** |
 
-## Roadmap
+## 🧭 Roadmap
 
-- React + MUI frontend (leaflet-react, Recharts, dark theme)
-- OpenAPI/Swagger docs
-- GitHub Actions CI (phpunit + phpstan already configured in `api/`)
+- ⏭️ React + MUI frontend (`leaflet-react`, Recharts, dark theme)
+- ⏭️ OpenAPI / Swagger docs
+- ⏭️ GitHub Actions CI (`phpunit` + `phpstan` configs already in `api/`)
 
-## License
+## 📄 License
 
-[MIT](LICENSE)
+[MIT](LICENSE) — free to use, remix, and build on.
