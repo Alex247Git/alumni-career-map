@@ -17,7 +17,7 @@ class InMemoryUserRepositoryTest extends TestCase
 
         $userRepository = new InMemoryUserRepository([1 => $user]);
 
-        $this->assertEquals([$user], $userRepository->findAll());
+        $this->assertEquals([$user], array_values($userRepository->findAll()));
     }
 
     public function testFindAllUsersByDefault()

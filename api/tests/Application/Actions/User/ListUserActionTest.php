@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Application\Actions\User;
 
 use App\Application\Actions\ActionPayload;
+use App\Application\Actions\User\ListUsersAction;
 use App\Domain\User\UserRepository;
 use App\Domain\User\User;
 use DI\Container;
@@ -14,7 +15,7 @@ class ListUserActionTest extends TestCase
 {
     public function testAction()
     {
-        $app = $this->getAppInstance();
+        $app = $this->getAppInstance(false);
 
         /** @var Container $container */
         $container = $app->getContainer();
@@ -28,6 +29,8 @@ class ListUserActionTest extends TestCase
             ->shouldBeCalledOnce();
 
         $container->set(UserRepository::class, $userRepositoryProphecy->reveal());
+
+        $app->get('/users', ListUsersAction::class);
 
         $request = $this->createRequest('GET', '/users');
         $response = $app->handle($request);
