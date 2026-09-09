@@ -33,8 +33,9 @@ Ever wondered "what do graduates do with their degree"? **Alumni Career Map** an
 
 ## 📁 Repository layout
 
-```
+```text
 docker-compose.yml           one-command full stack (db + api + frontend)
+.env.example                 template for overriding the dev credentials/secrets
 api/                         Slim 4 REST API (PHP)
   Dockerfile                 PHP 8.3 + composer image
   app/settings.php           runtime config — reads DB/JWT from env
@@ -64,6 +65,8 @@ The MySQL container creates the schema and seeds 20 synthetic alumni on first st
 > **Log in with any seeded alumnus** — email from `api/sql/seed.sql`, password **`alumni2026`**.
 
 To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down -v && docker compose up -d --build`.
+
+> 🔑 **Credentials** default to dev values (fine for the synthetic demo). To override — e.g. for a real deployment — copy `.env.example` → `.env` and edit, or `export` the variables before `docker compose up`. Nothing else in the repo needs to change.
 
 ---
 

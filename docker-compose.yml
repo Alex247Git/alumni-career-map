@@ -18,17 +18,18 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_ROOT_PASSWORD: root-dev-insecure
+      # secrets default to dev values — override via .env (see .env.example) or shell env
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root-dev-insecure}
       MYSQL_DATABASE: alumni_ds_db
       MYSQL_USER: alumni_api
-      MYSQL_PASSWORD: ApiPass_2026!
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ApiPass_2026!}
       MYSQL_ROOT_HOST: "%"
     volumes:
       # schema + seed run ONLY on an empty data volume (first `up`)
       - ./api/sql/docker:/docker-entrypoint-initdb.d:ro
       - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot-dev-insecure"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root-dev-insecure}"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -45,8 +46,8 @@ services:
       DB_PORT: "3306"
       DB_NAME: alumni_ds_db
       DB_USER: alumni_api
-      DB_PASS: ApiPass_2026!
-      JWT_SECRET: dev-only-insecure-secret-change-me
+      DB_PASS: ${DB_PASS:-ApiPass_2026!}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-insecure-secret-change-me}
       JWT_ISSUER: alumni-career-map
     depends_on:
       db:
