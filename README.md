@@ -27,7 +27,7 @@ Ever wondered "what do graduates do with their degree"? **Alumni Career Map** an
 | Data | MySQL · utf8mb4 · seed with geo-coordinates |
 | Frontend | Vanilla JS · **Bootstrap 5** · Leaflet · Charts |
 | Auth | JWT (firebase/php-jwt) · bearer tokens · ownership checks |
-| Ops | **Docker Compose** (root, one command) · auto-seeded MySQL · nginx reverse proxy |
+| Ops | **Docker Compose** (root, one command) · auto-seeded MySQL · nginx reverse proxy · CI (phpcs + phpstan + phpunit) |
 
 ---
 
@@ -106,7 +106,7 @@ To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down
 
 - ⏭️ React + MUI frontend (`leaflet-react`, Recharts, dark theme)
 - ⏭️ OpenAPI / Swagger docs
-- ⏭️ GitHub Actions CI (`phpunit` + `phpstan` configs already in `api/`)
+- ✅ GitHub Actions CI (phpcs + phpstan + phpunit on PHP 8.2/8.3)
 
 ## 📄 License
 
