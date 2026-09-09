@@ -27,7 +27,7 @@ Ever wondered "what do graduates do with their degree"? **Alumni Career Map** an
 | Data | MySQL · utf8mb4 · seed with geo-coordinates |
 | Frontend | Vanilla JS · **Bootstrap 5** · Leaflet · Charts |
 | Auth | JWT (firebase/php-jwt) · bearer tokens · ownership checks |
-| Ops | Docker compose · `api/sql/` schema+seed |
+| Ops | **Docker Compose** (root, one command) · auto-seeded MySQL · nginx reverse proxy |
 
 ---
 
@@ -83,7 +83,9 @@ To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down
    export $(cat .env | xargs)      # loads DB_PASS / JWT_SECRET …
    php -S 0.0.0.0:8081 -t public
    ```
-   …or `docker-compose up` from `api/` for the containerized path.
+   …or skip all of this and use the **one-command Docker stack** above.
+
+> ℹ️ The first `docker compose up --build` compiles PHP extensions and takes a few minutes — subsequent builds are cached and fast.
 
 3. **Frontend** — serve `frontend/` from any static server and point `api.js` `API_BASE` at your API.
 
