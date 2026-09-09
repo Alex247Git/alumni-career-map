@@ -1,7 +1,7 @@
 # Alumni Career Map — API runtime image
 # Slim 4 (PHP 8.3) + PDO MySQL, packs composer deps at build time.
 
-FROM php:8.3-alpine
+FROM php:8.5-alpine
 
 # composer + PDO MySQL driver + curl (health checks)
 RUN apk add --no-cache composer curl \
