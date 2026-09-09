@@ -56,6 +56,9 @@ return function (App $app) {
         // Endpoint #4: Get jobs of a specific alumnus (GET /api/v1/alumni/{id}/jobs)
         $group->get('/alumni/{id}/jobs', [AlumniController::class, 'getJobs']);
 
+        // Endpoint: Add a new job (POST /api/v1/alumni/{id}/jobs)
+        $group->post('/alumni/{id}/jobs', [JobController::class, 'create']);
+
         // Endpoint #6: Delete a job (DELETE /api/v1/alumni/{id}/jobs/{jobId})
         $group->delete('/alumni/{id}/jobs/{jobId}', [JobController::class, 'delete']);
 

@@ -465,7 +465,7 @@ async function handleJobFormSubmit(e) {
 
     const result = isEdit
         ? await apiUpdateJob(alumnusId, parseInt(jobId), data, state.token)
-        : null; // Add new job not implemented in API yet
+        : await apiCreateJob(alumnusId, data, state.token);
 
     if (result && result.ok) {
         hideModal('jobFormModal');
