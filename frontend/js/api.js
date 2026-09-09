@@ -3,7 +3,7 @@
  * All AJAX calls to the Alumni REST API
  */
 
-const API_BASE = 'http://localhost:8081';  // dev; swap for your production API origin
+const API_BASE = '';  // same-origin: nginx reverse-proxies /api/* to the Slim API container
 
 /**
  * Generic API request
