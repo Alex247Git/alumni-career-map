@@ -34,17 +34,40 @@ Ever wondered "what do graduates do with their degree"? **Alumni Career Map** an
 ## 📁 Repository layout
 
 ```
-api/                       Slim 4 REST API (PHP)
-  app/settings.php         runtime config — reads DB/JWT from env
-  sql/schema.sql           database schema
-  sql/seed.sql             20 synthetic graduates + jobs
-  sql/update_schema.sql    adds password column + API user
-  .env.example             env template (copy to .env, fill it in)
-frontend/                  single-page app (vanilla JS + Bootstrap 5)
-.htaccess                  routes /api/* → Slim, everything else → frontend
+docker-compose.yml           one-command full stack (db + api + frontend)
+api/                         Slim 4 REST API (PHP)
+  Dockerfile                 PHP 8.3 + composer image
+  app/settings.php           runtime config — reads DB/JWT from env
+  sql/schema.sql             database schema
+  sql/seed.sql               20 synthetic graduates + jobs
+  sql/docker/                schema + seed auto-loaded by the MySQL container
+  .env.example               env template (manual setup only)
+frontend/                    single-page app (vanilla JS + Bootstrap 5)
+  nginx.conf                 serves the app + reverse-proxies /api → API
+.htaccess                    routes /api/* → Slim, everything else → frontend
 ```
 
-## 🚀 Quick start
+## 🐳 Docker (recommended)
+
+Run the **whole stack** (MySQL + API + frontend) with a single command:
+
+```bash
+docker compose up -d --build
+```
+
+- 🗺️ UI → **http://localhost:8081**
+- ⚙️ API → **http://localhost:8081/api/v1** (nginx reverse-proxies `/api` → the API container, so the browser talks to one origin)
+- Raw API on **http://localhost:8080** (optional)
+
+The MySQL container creates the schema and seeds 20 synthetic alumni on first start, so you can log in right away:
+
+> **Log in with any seeded alumnus** — email from `api/sql/seed.sql`, password **`alumni2026`**.
+
+To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down -v && docker compose up -d --build`.
+
+---
+
+## 🚀 Manual quick start (no Docker)
 
 1. **Database**
    ```bash

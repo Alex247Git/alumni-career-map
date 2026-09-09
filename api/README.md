@@ -26,12 +26,12 @@ cd [my-app-name]
 composer start
 ```
 
-Or you can use `docker-compose` to run the app with `docker`, so you can run these commands:
+Or run the **full stack** (MySQL + API + frontend) with Docker from the repository root:
 ```bash
-cd [my-app-name]
-docker-compose up -d
+cd [repo-root]
+docker compose up -d --build
 ```
-After that, open `http://localhost:8080` in your browser.
+After that, the UI is at `http://localhost:8081` and the API at `http://localhost:8081/api/v1` (raw API: `http://localhost:8080`).
 
 Run this command in the application directory to run the test suite
 
