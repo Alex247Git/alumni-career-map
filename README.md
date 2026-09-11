@@ -5,7 +5,17 @@
 > Built as an individual project during my MSc studies.
 > All seed data is synthetic 👤 fake names, `@example.com` emails, fictional companies — safe to browse and demo.
 
-![Static Badge](https://img.shields.io/badge/Stack-PHP%20(Slim%204)-blue) ![Static Badge](https://img.shields.io/badge/Frontend-vanilla%20JS%20%2B%20Bootstrap%205-orange) ![Static Badge](https://img.shields.io/badge/DB-MySQL-brightgreen) ![Static Badge](https://img.shields.io/badge/Auth-JWT%20%2F%20ownership-orange) ![Static Badge](https://img.shields.io/badge/Docker-yes-green) ![Static Badge](https://img.shields.io/badge/Scope-small%20project-lightgrey)
+# Badges
+
+![PHP](https://img.shields.io/badge/PHP-8.2-blue) ![Slim 4](https://img.shields.io/badge/Slim%204-blue) ![Bootstrap 5](https://img.shields.io/badge/Bootstrap%205-orange) ![MySQL](https://img.shields.io/badge/MySQL-8-brightgreen) ![JWT Auth](https://img.shields.io/badge/Auth-JWT-orange) ![Docker](https://img.shields.io/badge/Docker-yes-green) ![License](https://img.shields.io/badge/License-MIT-brightgreen)
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Click_to_View-blue)](http://localhost:8081)
+[![Demo Video](https://img.shields.io/badge/Demo_Video-Watch_Video-red)](https://www.youtube.com/watch?v=YOUR_DEMO_VIDEO_ID)
+
+![GitHub Actions](https://github.com/Alex247Git/alumni-career-map/workflows/Tests/badge.svg)
+![PHP CS Fixer](https://github.com/Alex247Git/alumni-career-map/workflows/PHP-CS/badge.svg)
+![PHPStan](https://github.com/Alex247Git/alumni-career-map/workflows/PHPStan/badge.svg)
+![PHPUnit](https://github.com/Alex247Git/alumni-career-map/workflows/PHPUnit/badge.svg)
 
 ---
 

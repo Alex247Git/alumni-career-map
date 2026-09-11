@@ -48,22 +48,33 @@ async function main() {
     await page.waitForTimeout(3500) // let Leaflet tiles + analytics render
     await shot(page, '01-landing-map', { fullPage: true })
 
-    // 2) Open the login modal (no auth needed to screenshot UI)
+    // 2) Open the login modal (screenshot the UI)…
     try {
       await page.click('#loginBtn')
       await page.waitForTimeout(800)
       await shot(page, '02-login-modal')
-      await page.keyboard.press('Escape')
-      await page.waitForTimeout(400)
     } catch {
       console.error('login button not found — skipping shot 02')
+    }
+
+    // …then actually log in (demo credentials from seed.sql) so the
+    // subsequent search succeeds with a valid JWT instead of erroring.
+    try {
+      await page.fill('#loginEmail', 'gpapadop@example.com')
+      await page.fill('#loginPassword', 'alumni2026')
+      await page.click('#loginForm button[type="submit"]')
+      // wait until the modal closes = login completed
+      await page.waitForSelector('#loginModal.show', { state: 'detached', timeout: 15000 }).catch(() => {})
+      await page.waitForTimeout(1500)
+    } catch (e) {
+      console.error('login flow failed:', e.message)
     }
 
     // 3) Run a search (name "Pap") to show results + map pins
     try {
       await page.fill('#searchName', 'Pap')
       await page.click('button[type="submit"]')
-      await page.waitForTimeout(2500)
+      await page.waitForTimeout(3500) // results render + error/success toast auto-hides
       await shot(page, '03-search-results', { fullPage: true })
     } catch {
       console.error('search form not found — skipping shot 03')

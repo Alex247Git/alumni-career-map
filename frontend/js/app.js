@@ -307,7 +307,10 @@ async function performSearch() {
         // Chart remains static - always shows ALL alumni distribution
         // (the chart is a summary of all graduates, not filtered)
     } else {
-        showToast('Search failed', 'danger');
+        // Gracefully handle search failure / empty results without popping up an error toast
+        renderAlumniList([]);
+        renderPagination(null);
+        placeAlumniMarkers([], (alumnus) => openJobsModal(alumnus));
     }
 }
 
