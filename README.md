@@ -9,6 +9,20 @@
 
 ---
 
+## 📸 Demo
+
+> Live capture from the running Docker stack — generated with the [Playwright capture script](screenshots/README.md).
+
+| 🗺️ Interactive map (Leaflet + OpenStreetMap) | 🔐 JWT login |
+|:---:|:---:|
+| ![Interactive map — every alumnus pinned on the world map](docs/screenshots/01-landing-map.png) | ![JWT login modal](docs/screenshots/02-login-modal.png) |
+
+| 🔍 Multi-criteria search (pagination, JSON/XML API) |
+|:---:|
+| ![Search results with pagination](docs/screenshots/03-search-results.png) |
+
+---
+
 ## ✨ What it does
 
 Ever wondered "what do graduates do with their degree"? **Alumni Career Map** answers that in two clicks:
