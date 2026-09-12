@@ -77,4 +77,21 @@ class JobsCrudTest extends LiveStackTestCase
 
         $this->assertSame(404, $res['status']);
     }
+
+    public function testGetOwnJobsReturnsListWithJobs(): void
+    {
+        // Alumnus 1 owns job 1 (from seed) — reading your own jobs is allowed.
+        $res = self::authed('GET', '/api/v1/alumni/1/jobs');
+
+        $this->assertSame(200, $res['status']);
+        $this->assertIsArray($res['body']['data']);
+        $this->assertNotEmpty($res['body']['data'], 'seeded alumnus 1 should have at least one job');
+    }
+
+    public function testGetJobsForNonExistentAlumnusReturns404(): void
+    {
+        $res = self::authed('GET', '/api/v1/alumni/999999/jobs');
+
+        $this->assertSame(404, $res['status']);
+    }
 }
