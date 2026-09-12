@@ -23,6 +23,14 @@
 
 > Live capture from the running Docker stack — generated with the [Playwright capture script](screenshots/README.md).
 
+> **ℹ️ About the demo:** the Live Demo badge points to `localhost:8081` — the app currently runs **locally via Docker Compose**, not on a hosted server (so there is no uptime to monitor yet). To see it live yourself:
+>
+> ```bash
+> docker compose up -d --build   # → http://localhost:8081
+> ```
+>
+> A hosted demo with a status page is on the [roadmap](#-roadmap).
+
 | 🗺️ Interactive map (Leaflet + OpenStreetMap) | 🔐 JWT login |
 |:---:|:---:|
 | ![Interactive map — every alumnus pinned on the world map](docs/screenshots/01-landing-map.png) | ![JWT login modal](docs/screenshots/02-login-modal.png) |
