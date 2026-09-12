@@ -139,3 +139,11 @@ To stop: `docker compose down` · wipe data + rebuild seed: `docker compose down
 ## 📄 License
 
 [MIT](LICENSE) — free to use, remix, and build on.
+
+## 🔗 More From Me
+
+Also part of my portfolio:
+
+- 💼 [JobSearch Platform](https://github.com/Alex247Git/jobsearch) — React + Express job platform with AI-matched recommendations and real-time chat
+- 🔥 [Autonomous Firefighting Simulation](https://github.com/Alex247Git/autonomous-firefighting-simulation) — Mesa agent-based wildfire simulation in Python
+- 🌐 [Portfolio](https://alex247git.github.io/) — live overview of all my projects
